@@ -1,7 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:groceries_app/helpers/groceries_card.dart';
 import 'package:groceries_app/helpers/product_card.dart';
+import 'package:groceries_app/models/grocery.dart';
 import 'package:groceries_app/models/product.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,7 +15,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   int currentSlideIndex = 0;
-  final List<Product> _products = [
+  final List<Product> _exlusiveOffers = [
     Product(
       id: 1,
       name: 'Organic Banana',
@@ -43,15 +45,51 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/orange.png',
     ),
   ];
+  final List<Product> _bestSelling = [
+    Product(
+      id: 5,
+      name: 'Tomato',
+      price: 5.75,
+      image: 'assets/images/pepper.png',
+      description: '1Kg, price',
+    ),
+    Product(
+      id: 6,
+      name: 'Green Apple',
+      price: 12.79,
+      image: 'assets/images/apple_green.png',
+      description: '7pcs, price',
+    ),
+  ];
+  final List<Product> _groceryItems = [
+    Product(
+      id: 7,
+      name: 'Beef',
+      price: 20.75,
+      image: 'assets/images/beef.png',
+      description: '100g, price',
+    ),
+    Product(
+      id: 8,
+      name: 'Chicken',
+      price: 22.79,
+      image: 'assets/images/chicken.png',
+      description: '1pcs, price',
+    ),
+  ];
   final List<String> _slider = [
     'assets/images/B1.png',
     'assets/images/B1.png',
     'assets/images/B1.png',
   ];
+  final List<Grocery> _groceries = [
+    Grocery(id: '1', imagePath: 'assets/images/pulses1.png', name: 'Pulses'),
+    Grocery(id: '2', imagePath: 'assets/images/rices.png', name: 'Rices'),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      // appBar: AppBar(),
       backgroundColor: Colors.white,
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -122,7 +160,99 @@ class _HomeScreenState extends State<HomeScreen> {
             child: ListView(
               scrollDirection: Axis.horizontal,
               padding: EdgeInsets.symmetric(horizontal: 20),
-              children: _products
+              children: _exlusiveOffers
+                  .map(
+                    (product) => Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: ProductCard(product: product),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Best Selling',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Spacer(),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 220,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: _bestSelling
+                  .map(
+                    (product) => Padding(
+                      padding: const EdgeInsets.only(right: 16),
+                      child: ProductCard(product: product),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
+          Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Text(
+                  'Best Selling',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+              ),
+              Spacer(),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  'See All',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green,
+                  ),
+                ),
+              ),
+            ],
+          ),
+
+          SizedBox(
+            height: 100,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              children: [
+                for (int i = 0; i < _groceries.length; i++)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 16),
+                    child: GroceriesCard(grocery: _groceries[i]),
+                  ),
+              ],
+            ),
+          ),
+          SizedBox(height: 20),
+          SizedBox(
+            height: 220,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              children: _groceryItems
                   .map(
                     (product) => Padding(
                       padding: const EdgeInsets.only(right: 16),
