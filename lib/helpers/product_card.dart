@@ -8,51 +8,58 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      // Added const to EdgeInsets
+      width: 174,
+      height: 249,
       padding: EdgeInsets.all(16),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(20),
         color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
         border: Border.all(color: Colors.grey.shade300),
       ),
       child: Column(
-        // Changed to .start so the text aligns to the left (optional)
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 16), // Added const
-          // Ensure this path is in your pubspec.yaml!
-          Image.asset(product.image, width: 100),
-          Text(
-            // Added const
-            product.name,
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            textAlign: TextAlign.start,
+          Expanded(
+            child: Center(child: Image.asset(product.image, width: 100)),
           ),
           SizedBox(height: 8),
+          Text(
+            product.name,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Poppins',
+            ),
+          ),
+          SizedBox(height: 6),
           Text(
             product.description,
             textAlign: TextAlign.start,
             style: TextStyle(
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
+              fontSize: 14,
+              fontWeight: FontWeight.w400,
               color: Colors.black54,
+              fontFamily: 'Poppins',
             ),
           ),
           Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: Text(
-                  '\$${product.price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              Text(
+                "\$${product.price.toStringAsFixed(2)}",
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: 'Poppins',
                 ),
-              ), // Added const
-
+              ),
               Padding(
-                padding: EdgeInsets.all(8.0),
+                padding: const EdgeInsets.only(left: 12),
                 child: IconButton(
                   onPressed: () {},
-                  icon: Icon(Icons.add, color: Colors.white), // Added const
+                  icon: Icon(Icons.add, color: Colors.white),
                   style: IconButton.styleFrom(
                     backgroundColor: Colors.green,
                     shape: RoundedRectangleBorder(

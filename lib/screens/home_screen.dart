@@ -19,21 +19,21 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/bananas.jpg',
     ),
     Product(
-      id: 1,
+      id: 2,
       name: 'Organic Banana',
       description: '7pcs, Price',
       price: 4.9999,
       image: 'assets/images/bananas.jpg',
     ),
     Product(
-      id: 1,
+      id: 3,
       name: 'Organic Banana',
       description: '7pcs, Price',
       price: 4.9999,
       image: 'assets/images/bananas.jpg',
     ),
     Product(
-      id: 1,
+      id: 4,
       name: 'Organic Banana',
       description: '7pcs, Price',
       price: 4.9999,
@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       body: Padding(
         padding: const EdgeInsets.all(20),
         child: Column(
-          spacing: 20,
+          spacing: 16,
           children: [
             Row(
               children: _products
