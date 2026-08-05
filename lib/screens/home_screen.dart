@@ -48,7 +48,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<Product> _bestSelling = [
     Product(
       id: 5,
-      name: 'Tomato',
+      name: 'Red Pepper',
       price: 5.75,
       image: 'assets/images/pepper.png',
       description: '1Kg, price',
@@ -58,6 +58,13 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Green Apple',
       price: 12.79,
       image: 'assets/images/apple_green.png',
+      description: '7pcs, price',
+    ),
+    Product(
+      id: 7,
+      name: 'Tomato',
+      price: 2.79,
+      image: 'assets/images/tomato.png',
       description: '7pcs, price',
     ),
   ];
@@ -79,8 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   final List<String> _slider = [
     'assets/images/B1.png',
-    'assets/images/B1.png',
-    'assets/images/B1.png',
+    'assets/images/B2.jpg',
+    'assets/images/B3.png',
   ];
   final List<Grocery> _groceries = [
     Grocery(id: '1', imagePath: 'assets/images/pulses1.png', name: 'Pulses'),
@@ -130,6 +137,31 @@ class _HomeScreenState extends State<HomeScreen> {
                 currentSlideIndex = index;
                 setState(() {});
               },
+            ),
+          ),
+          SizedBox(height: 10),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                for (int i = 0; i < _slider.length; i++)
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 600),
+                    width: 10,
+                    height: 10,
+                    decoration: BoxDecoration(
+                      color: currentSlideIndex == i
+                          ? Colors.green
+                          : Colors.grey,
+                      shape: BoxShape.circle,
+                    ),
+                    // margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+                    margin: EdgeInsets.only(
+                      right: i == _slider.length - 1 ? 0 : 8,
+                    ),
+                  ),
+              ],
             ),
           ),
           Row(
