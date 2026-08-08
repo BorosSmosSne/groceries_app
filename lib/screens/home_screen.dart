@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg_provider/flutter_svg_provider.dart';
 import 'package:groceries_app/helpers/groceries_card.dart';
 import 'package:groceries_app/helpers/product_card.dart';
 import 'package:groceries_app/models/grocery.dart';
+import 'package:groceries_app/models/menu_item.dart';
 import 'package:groceries_app/models/product.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -93,6 +95,13 @@ class _HomeScreenState extends State<HomeScreen> {
     Grocery(id: '1', imagePath: 'assets/images/pulses1.png', name: 'Pulses'),
     Grocery(id: '2', imagePath: 'assets/images/rices.png', name: 'Rices'),
   ];
+  final List<MenuItem> _menus = [
+    MenuItem(label: 'Shop', icon: 'assets/images/svg/shop.svg'),
+    MenuItem(label: 'Search', icon: 'assets/images/svg/search.svg'),
+    MenuItem(label: 'Card', icon: 'assets/images/svg/cart.svg'),
+    MenuItem(label: 'Favorite', icon: 'assets/images/svg/favorite.svg'),
+    MenuItem(label: 'Account', icon: 'assets/images/svg/account.svg'),
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,6 +109,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: Colors.white,
       body: ListView(
         scrollDirection: Axis.vertical,
+        padding: EdgeInsets.only(bottom: 20),
         children: [
           Padding(
             padding: const EdgeInsets.only(
@@ -145,30 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SizedBox(height: 10),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                for (int i = 0; i < _slider.length; i++)
-                  AnimatedContainer(
-                    duration: Duration(milliseconds: 600),
-                    width: 10,
-                    height: 10,
-                    decoration: BoxDecoration(
-                      color: currentSlideIndex == i
-                          ? Colors.green
-                          : Colors.grey,
-                      shape: BoxShape.circle,
-                    ),
-                    // margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                    margin: EdgeInsets.only(
-                      right: i == _slider.length - 1 ? 0 : 8,
-                    ),
-                  ),
-              ],
-            ),
-          ),
+          Align(alignment: Alignment.bottomCenter, child: buildIndicators()),
           Row(
             children: [
               Padding(
@@ -301,8 +288,42 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        selectedItemColor: Colors.green,
+        unselectedItemColor: Colors.black87,
+        showUnselectedLabels: true,
+        backgroundColor: Colors.white,
+        type: BottomNavigationBarType.fixed,
+        items: [
+          for (int index = 0; index < _menus.length; index++)
+            BottomNavigationBarItem(
+              icon: ImageIcon(Svg(_menus[index].icon)),
+              label: _menus[index].label,
+            ),
+        ],
+      ),
 
       // floatingActionButton: FloatingActionButton.extended(onPressed: () {}),
+    );
+  }
+
+  Row buildIndicators() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (int i = 0; i < _slider.length; i++)
+          AnimatedContainer(
+            duration: Duration(milliseconds: 600),
+            width: 10,
+            height: 10,
+            decoration: BoxDecoration(
+              color: currentSlideIndex == i ? Colors.green : Colors.grey,
+              shape: BoxShape.circle,
+            ),
+            // margin: EdgeInsets.only(left: 20, top: 10, bottom: 10),
+            margin: EdgeInsets.only(right: i == _slider.length - 1 ? 0 : 8),
+          ),
+      ],
     );
   }
 }
