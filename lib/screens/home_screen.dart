@@ -87,7 +87,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<String> _slider = [
     'assets/images/B1.png',
     'assets/images/B2.jpg',
-    'assets/images/B3.png',
+    'assets/images/B7.jpg',
   ];
   final List<Grocery> _groceries = [
     Grocery(id: '1', imagePath: 'assets/images/pulses1.png', name: 'Pulses'),
@@ -102,7 +102,12 @@ class _HomeScreenState extends State<HomeScreen> {
         scrollDirection: Axis.vertical,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 20, top: 16, bottom: 16),
+            padding: const EdgeInsets.only(
+              left: 20,
+              top: 16,
+              bottom: 16,
+              right: 20,
+            ),
             child: CupertinoSearchTextField(
               style: TextStyle(
                 fontFamily: 'Poppin',
