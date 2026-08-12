@@ -7,6 +7,7 @@ import 'package:groceries_app/helpers/product_card.dart';
 import 'package:groceries_app/models/grocery.dart';
 import 'package:groceries_app/models/menu_item.dart';
 import 'package:groceries_app/models/product.dart';
+import 'package:groceries_app/screens/product_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(),
+      appBar: AppBar(),
       backgroundColor: Colors.white,
       body: ListView(
         scrollDirection: Axis.vertical,
@@ -226,7 +227,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   .map(
                     (product) => Padding(
                       padding: const EdgeInsets.only(right: 16),
-                      child: ProductCard(product: product),
+                      child: ProductCard(
+                        product: product,
+                        // onPressed: () {
+                        //   Navigator.push(
+                        //     context,
+                        //     MaterialPageRoute(
+                        //       builder: (context) => ProductDetailScreen(product: product),
+                        //     ),
+                        //   );
+                        // }
+                      ),
                     ),
                   )
                   .toList(),

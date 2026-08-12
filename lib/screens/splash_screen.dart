@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/screens/home_screen.dart';
+import 'package:groceries_app/screens/login_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -11,10 +13,26 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   bool _isExpanded = false;
 
-  _init() async {
+  Future<void> _init() async {
     await Future.delayed(Duration(seconds: 1));
-    // setState(() {});
+
+    if (!mounted) return;
+    setState(() {
+      _isExpanded = true;
+    });
+
     await Future.delayed(Duration(milliseconds: 2500));
+
+    if (!mounted) return;
+    final SharedPreferences preferences = await SharedPreferences.getInstance();
+    final token = preferences.getString('sv9.pos.token');
+    if (token == null) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginScreen()),
+        (route) => false,
+      );
+    } else {}
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => HomeScreen()),
