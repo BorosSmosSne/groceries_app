@@ -4,6 +4,8 @@ class Product {
   String description;
   double price;
   String image;
+  String description2;
+  String nutrition;
 
   Product({
     required this.id,
@@ -11,5 +13,7 @@ class Product {
     required this.description,
     required this.price,
     required this.image,
+    required this.description2,
+    required this.nutrition,
   });
 }

@@ -14,23 +14,26 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int _quantity = 1;
   bool _isFavorite = false;
-  bool _isDetailExpanded = true;
+  bool _isDetailExpanded = false;
 
   static const _green = Color(0xFF4CAF50);
 
-  static const _detailText =
-      'Apples are nutritious. Apples may be good for weight '
-      'loss. Apples may be good for your heart. As part of a '
-      'healthful and varied diet.';
-
-  void _incrementQuantity() => setState(() => _quantity++);
-
-  void _decrementQuantity() {
-    if (_quantity > 1) setState(() => _quantity--);
+  // -- logic Methods --
+  void _incrementQuantity() {
+    setState(() {
+      _quantity++;
+    });
   }
 
-  // NOTE: _totalPrice has been completely removed!
+  void _decrementQuantity() {
+    if (_quantity > 1) {
+      setState(() {
+        _quantity--;
+      });
+    }
+  }
 
+  double get _totalPrice => widget.product.price * _quantity;
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
@@ -40,53 +43,50 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       body: SafeArea(
         child: Column(
           children: [
-            // ---- Image header ----
-            Stack(
-              children: [
-                Container(
-                  height: 320,
-                  width: double.infinity,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFF2F2F2),
-                    borderRadius: BorderRadius.vertical(
-                      bottom: Radius.circular(28),
+            // AppBar(),
+            // Image.asset(product.image, width: 320, height: 200),
+            Container(
+              height: 372,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Center(
+                    child: Image.asset(product.image, width: 330, height: 200),
+                  ),
+                  Positioned(
+                    top: 16,
+                    left: 16,
+                    child: IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.black),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
                     ),
                   ),
-                  child: ClipRRect(
-                    borderRadius: const BorderRadius.vertical(
-                      bottom: Radius.circular(28),
+                  Positioned(
+                    top: 16,
+                    right: 16,
+                    child: IconButton(
+                      icon: Icon(Icons.ios_share, color: Colors.black),
+                      onPressed: () {
+                        // Implement share functionality here
+                        Navigator.pop(context);
+                      },
                     ),
-                    child: Image.asset(
-                      product.image,
-                      fit: BoxFit.contain,
-                      errorBuilder: (_, __, ___) =>
-                          const Icon(Icons.image_not_supported, size: 64),
-                    ),
                   ),
-                ),
-                Positioned(
-                  top: 8,
-                  left: 8,
-                  child: IconButton(
-                    icon: const Icon(Icons.arrow_back_ios_new),
-                    onPressed: () => Navigator.pop(context, 'Add To Basket'),
-                  ),
-                ),
-                Positioned(
-                  top: 8,
-                  right: 8,
-                  child: IconButton(
-                    icon: const Icon(Icons.ios_share),
-                    onPressed: () {},
-                  ),
-                ),
-              ],
+                ],
+              ),
             ),
-
-            // ---- Content ----
             Expanded(
               child: SingleChildScrollView(
-                padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
+                padding: EdgeInsets.all(20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -96,9 +96,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         Expanded(
                           child: Text(
                             product.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 24,
-                              fontWeight: FontWeight.w600,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -108,184 +108,205 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                 ? Icons.favorite
                                 : Icons.favorite_border,
                             color: _isFavorite ? Colors.red : Colors.grey,
+                            size: 23,
                           ),
-                          onPressed: () =>
-                              setState(() => _isFavorite = !_isFavorite),
+                          onPressed: () {
+                            setState(() {
+                              _isFavorite = !_isFavorite;
+                            });
+                          },
                         ),
                       ],
                     ),
-                    const SizedBox(height: 4),
-                    // In this model, `description` holds the unit label
-                    // (e.g. "1Kg, Price"), same as it's used in ProductCard.
                     Text(
                       product.description,
-                      style: const TextStyle(color: Colors.grey, fontSize: 14),
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey,
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
-                    const SizedBox(height: 16),
-
-                    // ---- Quantity + price ----
+                    const SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
                           children: [
-                            _qtyButton(Icons.remove, _decrementQuantity),
+                            IconButton(
+                              onPressed: _decrementQuantity,
+                              icon: Icon(Icons.remove, color: Colors.grey),
+                            ),
                             Container(
-                              width: 48,
-                              alignment: Alignment.center,
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              // padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                border: Border.all(color: Colors.grey.shade300),
+                                borderRadius: BorderRadius.circular(12),
+                              ),
                               child: Text(
                                 '$_quantity',
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 18,
-                                  fontWeight: FontWeight.w600,
+                                  fontWeight: FontWeight.bold,
                                 ),
                               ),
                             ),
-                            _qtyButton(
-                              Icons.add,
-                              _incrementQuantity,
-                              filled: false,
-                              iconColor: _green,
+                            IconButton(
+                              onPressed: _incrementQuantity,
+                              icon: Icon(Icons.add, color: _green),
                             ),
                           ],
                         ),
                         Text(
-                          // NOTE: Now displaying the fixed product price directly!
                           '\$${product.price.toStringAsFixed(2)}',
                           style: const TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.w600,
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ],
                     ),
-
-                    const SizedBox(height: 20),
-                    const Divider(height: 1),
-
-                    // ---- Product Detail (expandable) ----
-                    _sectionHeader(
-                      title: 'Product Detail',
-                      expanded: _isDetailExpanded,
-                      onTap: () => setState(
-                        () => _isDetailExpanded = !_isDetailExpanded,
+                    SizedBox(height: 24),
+                    Divider(thickness: 1),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Product Detail',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
+                      trailing: Icon(
+                        _isDetailExpanded
+                            ? Icons.keyboard_arrow_down
+                            : Icons.keyboard_arrow_right,
+                      ),
+                      onTap: () {
+                        setState(() {
+                          _isDetailExpanded = !_isDetailExpanded;
+                        });
+                      },
                     ),
                     if (_isDetailExpanded)
-                      const Padding(
-                        padding: EdgeInsets.only(bottom: 16, top: 4),
-                        child: Text(
-                          _detailText,
-                          style: TextStyle(color: Colors.grey, height: 1.4),
+                      Text(
+                        product.description2,
+                        style: TextStyle(color: Colors.grey, height: 1.5),
+                      ),
+                    Divider(thickness: 1),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Nutritions',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                    const Divider(height: 1),
-
-                    _sectionHeader(
-                      title: 'Nutritions',
-                      trailing: const Text(
-                        '100g',
-                        style: TextStyle(color: Colors.grey, fontSize: 12),
-                      ),
-                      onTap: () {},
-                    ),
-                    const Divider(height: 1),
-
-                    _sectionHeader(
-                      title: 'Review',
                       trailing: Row(
                         mainAxisSize: MainAxisSize.min,
-                        children: List.generate(
-                          5,
-                          (i) => const Icon(
-                            Icons.star,
-                            color: Colors.deepOrange,
-                            size: 18,
+                        children: [
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 4,
+                            ),
+                            decoration: BoxDecoration(
+                              color: Color(0xFFEBEBEB),
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(5),
+                              ),
+                            ),
+                            child: Text(
+                              product.nutrition,
+                              style: TextStyle(fontSize: 12),
+                            ),
                           ),
+                          SizedBox(width: 8),
+                          Icon(Icons.keyboard_arrow_right),
+                        ],
+                      ),
+                    ),
+                    Divider(thickness: 1),
+                    ListTile(
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        'Review',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
-                      onTap: () {},
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(Icons.star, color: Colors.orange, size: 20),
+                          Icon(Icons.star, color: Colors.orange, size: 20),
+                          Icon(Icons.star, color: Colors.orange, size: 20),
+                          Icon(Icons.star, color: Colors.orange, size: 20),
+                          Icon(Icons.star, color: Colors.orange, size: 20),
+                          SizedBox(width: 8),
+                          Icon(Icons.keyboard_arrow_right),
+                        ],
+                      ),
                     ),
-                    const SizedBox(height: 90),
                   ],
                 ),
               ),
             ),
-          ],
-        ),
-      ),
-
-      // ---- Add to Basket ----
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
-        child: SizedBox(
-          height: 56,
-          child: ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: _green,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(28),
+            Padding(
+              padding: EdgeInsets.all(20),
+              child: ElevatedButton(
+                onPressed: () {
+                  print(
+                    'Added $_quantity ${product.name} to basket for \$${_totalPrice.toStringAsFixed(2)}',
+                  );
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: _green,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  padding: EdgeInsets.symmetric(vertical: 20),
+                  minimumSize: Size(double.infinity, 60),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Add To Basket',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    // SizedBox(width: 40),
+                    // Container(
+                    //   padding: const EdgeInsets.symmetric(
+                    //     horizontal: 8,
+                    //     vertical: 4,
+                    //   ),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.black12,
+                    //     borderRadius: BorderRadius.circular(8),
+                    //   ),
+                    //   child: Text(
+                    //     '\$${_totalPrice.toStringAsFixed(2)}',
+                    //     style: const TextStyle(
+                    //       fontSize: 14,
+                    //       fontWeight: FontWeight.bold,
+                    //       color: Colors.white,
+                    //     ),
+                    //   ),
+                    // ),
+                  ],
+                ),
               ),
             ),
-            onPressed: () {
-              Navigator.pop(context, 'Add To Basket');
-              print('successfully added to basket');
-            },
-
-            child: const Text(
-              'Add To Basket',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _qtyButton(
-    IconData icon,
-    VoidCallback onPressed, {
-    bool filled = true,
-    Color iconColor = Colors.black,
-  }) {
-    return InkWell(
-      onTap: onPressed,
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey.shade300),
-        ),
-        child: Icon(icon, size: 18, color: iconColor),
-      ),
-    );
-  }
-
-  Widget _sectionHeader({
-    required String title,
-    Widget? trailing,
-    bool? expanded,
-    required VoidCallback onTap,
-  }) {
-    return InkWell(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 14),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              title,
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-            ),
-            trailing ??
-                Icon(
-                  expanded == true
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                ),
           ],
         ),
       ),

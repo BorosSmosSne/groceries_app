@@ -24,7 +24,10 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Organic Banana',
       description: '7pcs, Price',
       price: 4.9999,
-      image: 'assets/images/bananas.jpg',
+      image: 'assets/images/bananas.png',
+      description2:
+          'Bananas are a good source of potassium and fiber. They can help improve digestion, support heart health, and provide a quick energy boost.',
+      nutrition: '100gr',
     ),
     Product(
       id: 2,
@@ -32,6 +35,9 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '1Kg, Price',
       price: 4.9999,
       image: 'assets/images/apple.png',
+      description2:
+          'Apples are rich in antioxidants and dietary fiber. They may help reduce the risk of chronic diseases, support weight management, and promote overall health.',
+      nutrition: '250gr',
     ),
     Product(
       id: 3,
@@ -39,6 +45,9 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '100g, Price',
       price: 2.75,
       image: 'assets/images/carrot.png',
+      description2:
+          'Carrots are high in beta-carotene, which is converted to vitamin A in the body. They support eye health, boost the immune system, and may reduce the risk of certain cancers.',
+      nutrition: '250gr',
     ),
     Product(
       id: 4,
@@ -46,6 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '7pcs, Price',
       price: 6.79,
       image: 'assets/images/orange.png',
+      description2:
+          'Oranges are an excellent source of vitamin C and antioxidants. They can help strengthen the immune system, improve skin health, and reduce the risk of chronic diseases.',
+      nutrition: '150gr',
     ),
   ];
   final List<Product> _bestSelling = [
@@ -55,6 +67,9 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 5.75,
       image: 'assets/images/pepper.png',
       description: '1Kg, price',
+      description2:
+          'Red peppers are rich in vitamin C and antioxidants. They can help boost the immune system, improve skin health, and reduce the risk of chronic diseases.',
+      nutrition: '120gr',
     ),
     Product(
       id: 6,
@@ -62,6 +77,9 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 12.79,
       image: 'assets/images/apple_green.png',
       description: '7pcs, price',
+      description2:
+          'Green apples are a good source of dietary fiber and vitamin C. They can help improve digestion, support heart health, and provide a quick energy boost.',
+      nutrition: '80gr',
     ),
     Product(
       id: 7,
@@ -69,6 +87,9 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 2.79,
       image: 'assets/images/tomato.png',
       description: '7pcs, price',
+      description2:
+          'Tomatoes are rich in lycopene, an antioxidant that may help reduce the risk of certain cancers. They also support heart health and improve skin health.',
+      nutrition: '130gr',
     ),
   ];
   final List<Product> _groceryItems = [
@@ -78,6 +99,9 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 20.75,
       image: 'assets/images/beef.png',
       description: '100g, price',
+      description2:
+          'Beef is a rich source of protein, iron, and vitamin B12. It can help support muscle growth, improve energy levels, and promote overall health.',
+      nutrition: '100gr',
     ),
     Product(
       id: 8,
@@ -85,6 +109,9 @@ class _HomeScreenState extends State<HomeScreen> {
       price: 22.79,
       image: 'assets/images/chicken.png',
       description: '1pcs, price',
+      description2:
+          'Chicken is a good source of lean protein and essential amino acids. It can help support muscle development, improve immune function, and provide sustained energy.',
+      nutrition: '110gr',
     ),
   ];
   final List<String> _slider = [
@@ -97,21 +124,39 @@ class _HomeScreenState extends State<HomeScreen> {
     Grocery(id: '2', imagePath: 'assets/images/rices.png', name: 'Rices'),
   ];
   final List<MenuItem> _menus = [
-    MenuItem(label: 'Shop', icon: 'assets/images/svg/shop.svg'),
-    MenuItem(label: 'Search', icon: 'assets/images/svg/search.svg'),
-    MenuItem(label: 'Card', icon: 'assets/images/svg/cart.svg'),
-    MenuItem(label: 'Favorite', icon: 'assets/images/svg/favorite.svg'),
-    MenuItem(label: 'Account', icon: 'assets/images/svg/account.svg'),
+    MenuItem(label: 'Shop', icon: 'assets/images/svg/Shop.svg'),
+    MenuItem(label: 'Search', icon: 'assets/images/svg/Search.svg'),
+    MenuItem(label: 'Card', icon: 'assets/images/svg/Cart.svg'),
+    MenuItem(label: 'Favorite', icon: 'assets/images/svg/Favorite.svg'),
+    MenuItem(label: 'Account', icon: 'assets/images/svg/Account.svg'),
   ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      // appBar: AppBar(),
       backgroundColor: Colors.white,
       body: ListView(
         scrollDirection: Axis.vertical,
-        padding: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: 50, top: 70),
         children: [
+          // SizedBox(height: 70),
+          Image.asset('assets/icons/carrot_logo.png', height: 30),
+          SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.location_on, color: Colors.black54, size: 20),
+              SizedBox(width: 4),
+              Text(
+                'Phnom Penh, Cambodia',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.black54,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
           Padding(
             padding: const EdgeInsets.only(
               left: 20,
