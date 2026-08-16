@@ -6,6 +6,7 @@ class Product {
   String image;
   String description2;
   String nutrition;
+  List<String>? images;
 
   Product({
     required this.id,
@@ -15,5 +16,6 @@ class Product {
     required this.image,
     required this.description2,
     required this.nutrition,
+    this.images,
   });
 }

@@ -7,11 +7,11 @@ import 'package:groceries_app/screens/splash_screen.dart';
 
 void main() {
   runApp(
-    // DevicePreview(
-    //   enabled: !kReleaseMode,
-    //   builder: (context) => const MainApp(),
-    // ),
-    const MainApp(),
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MainApp(),
+    ),
+    // const MainApp(),
   );
 }
 
@@ -21,8 +21,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      // locale: DevicePreview.locale(context),
-      // builder: DevicePreview.appBuilder,
+      locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       // HomeScreen(),

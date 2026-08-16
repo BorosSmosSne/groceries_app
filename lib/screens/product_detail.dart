@@ -1,5 +1,5 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:groceries_app/models/product.dart';
 
 class ProductDetailScreen extends StatefulWidget {
@@ -15,8 +15,83 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int _quantity = 1;
   bool _isFavorite = false;
   bool _isDetailExpanded = false;
+  int _currentImageIndex = 0;
 
   static const _green = Color(0xFF4CAF50);
+
+  // ==========================================
+  // Functions at top for Carousel Slider
+  // ==========================================
+
+  /// Builds the image carousel slider with at least 2 or 3 images
+  Widget buildImageSlider(List<String> images) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        const SizedBox(height: 30),
+        CarouselSlider(
+          items: images.map((imagePath) {
+            return Center(
+              child: Image.asset(
+                imagePath,
+                width: 330,
+                height: 200,
+                fit: BoxFit.contain,
+                errorBuilder: (context, error, stackTrace) =>
+                    const Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
+              ),
+            );
+          }).toList(),
+          options: CarouselOptions(
+            height: 200,
+            viewportFraction: 1.0,
+            autoPlay: true,
+            autoPlayInterval: const Duration(seconds: 3),
+            enlargeCenterPage: false,
+            onPageChanged: (index, reason) {
+              setState(() {
+                _currentImageIndex = index;
+              });
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        buildCarouselIndicators(images.length),
+      ],
+    );
+  }
+
+  /// Builds dot indicators for carousel slider
+  Widget buildCarouselIndicators(int count) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: List.generate(count, (index) {
+        return AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          margin: const EdgeInsets.symmetric(horizontal: 3),
+          width: _currentImageIndex == index ? 20 : 6,
+          height: 6,
+          decoration: BoxDecoration(
+            color: _currentImageIndex == index ? _green : Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(4),
+          ),
+        );
+      }),
+    );
+  }
+
+  /// Returns list of product images (at least 2-3 images)
+  List<String> getProductImages() {
+    if (widget.product.images != null && widget.product.images!.isNotEmpty) {
+      return widget.product.images!;
+    }
+    // Fallback default list with 3 images
+    return [
+      widget.product.image,
+      widget.product.image,
+      widget.product.image,
+    ];
+  }
 
   // -- logic Methods --
   void _incrementQuantity() {
@@ -34,6 +109,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   }
 
   double get _totalPrice => widget.product.price * _quantity;
+
   @override
   Widget build(BuildContext context) {
     final product = widget.product;
@@ -50,7 +126,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               width: double.infinity,
               decoration: BoxDecoration(
                 color: Colors.grey.shade100,
-                borderRadius: BorderRadius.only(
+                borderRadius: const BorderRadius.only(
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
@@ -58,13 +134,13 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               child: Stack(
                 children: [
                   Center(
-                    child: Image.asset(product.image, width: 330, height: 200),
+                    child: buildImageSlider(getProductImages()),
                   ),
                   Positioned(
                     top: 16,
                     left: 16,
                     child: IconButton(
-                      icon: Icon(Icons.arrow_back, color: Colors.black),
+                      icon: const Icon(Icons.arrow_back, color: Colors.black),
                       onPressed: () {
                         Navigator.pop(context);
                       },
@@ -74,7 +150,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     top: 16,
                     right: 16,
                     child: IconButton(
-                      icon: Icon(Icons.ios_share, color: Colors.black),
+                      icon: const Icon(Icons.ios_share, color: Colors.black),
                       onPressed: () {
                         // Implement share functionality here
                         Navigator.pop(context);
@@ -161,7 +237,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           ],
                         ),
                         Text(
-                          '\$${product.price.toStringAsFixed(2)}',
+                          '\$${_totalPrice.toStringAsFixed(2)}',
                           style: const TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
@@ -258,12 +334,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20),
               child: ElevatedButton(
                 onPressed: () {
-                  print(
-                    'Added $_quantity ${product.name} to basket for \$${_totalPrice.toStringAsFixed(2)}',
-                  );
+                  Navigator.pop(context);
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: _green,

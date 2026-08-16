@@ -7,7 +7,6 @@ import 'package:groceries_app/helpers/product_card.dart';
 import 'package:groceries_app/models/grocery.dart';
 import 'package:groceries_app/models/menu_item.dart';
 import 'package:groceries_app/models/product.dart';
-import 'package:groceries_app/screens/product_detail.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -25,6 +24,11 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '7pcs, Price',
       price: 4.9999,
       image: 'assets/images/bananas.png',
+      images: [
+        'assets/images/bananas.png',
+        'assets/images/banana_2.png',
+        'assets/images/bananas.png',
+      ],
       description2:
           'Bananas are a good source of potassium and fiber. They can help improve digestion, support heart health, and provide a quick energy boost.',
       nutrition: '100gr',
@@ -35,6 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '1Kg, Price',
       price: 4.9999,
       image: 'assets/images/apple.png',
+      images: [
+        'assets/images/apple.png',
+        'assets/images/apple_2.png',
+        'assets/images/apple_3.png',
+      ],
       description2:
           'Apples are rich in antioxidants and dietary fiber. They may help reduce the risk of chronic diseases, support weight management, and promote overall health.',
       nutrition: '250gr',
@@ -45,6 +54,11 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '100g, Price',
       price: 2.75,
       image: 'assets/images/carrot.png',
+      images: [
+        'assets/images/carrot.png',
+        'assets/images/carrot.png',
+        'assets/images/carrot.png',
+      ],
       description2:
           'Carrots are high in beta-carotene, which is converted to vitamin A in the body. They support eye health, boost the immune system, and may reduce the risk of certain cancers.',
       nutrition: '250gr',
@@ -55,6 +69,11 @@ class _HomeScreenState extends State<HomeScreen> {
       description: '7pcs, Price',
       price: 6.79,
       image: 'assets/images/orange.png',
+      images: [
+        'assets/images/orange.png',
+        'assets/images/orange.png',
+        'assets/images/orange.png',
+      ],
       description2:
           'Oranges are an excellent source of vitamin C and antioxidants. They can help strengthen the immune system, improve skin health, and reduce the risk of chronic diseases.',
       nutrition: '150gr',
@@ -66,6 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Red Pepper',
       price: 5.75,
       image: 'assets/images/pepper.png',
+      images: [
+        'assets/images/pepper.png',
+        'assets/images/pepper.png',
+        'assets/images/pepper.png',
+      ],
       description: '1Kg, price',
       description2:
           'Red peppers are rich in vitamin C and antioxidants. They can help boost the immune system, improve skin health, and reduce the risk of chronic diseases.',
@@ -76,6 +100,11 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Green Apple',
       price: 12.79,
       image: 'assets/images/apple_green.png',
+      images: [
+        'assets/images/apple_green.png',
+        'assets/images/apple.png',
+        'assets/images/apple_2.png',
+      ],
       description: '7pcs, price',
       description2:
           'Green apples are a good source of dietary fiber and vitamin C. They can help improve digestion, support heart health, and provide a quick energy boost.',
@@ -86,6 +115,11 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Tomato',
       price: 2.79,
       image: 'assets/images/tomato.png',
+      images: [
+        'assets/images/tomato.png',
+        'assets/images/tomato.png',
+        'assets/images/tomato.png',
+      ],
       description: '7pcs, price',
       description2:
           'Tomatoes are rich in lycopene, an antioxidant that may help reduce the risk of certain cancers. They also support heart health and improve skin health.',
@@ -98,6 +132,11 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Beef',
       price: 20.75,
       image: 'assets/images/beef.png',
+      images: [
+        'assets/images/beef.png',
+        'assets/images/beef.png',
+        'assets/images/beef.png',
+      ],
       description: '100g, price',
       description2:
           'Beef is a rich source of protein, iron, and vitamin B12. It can help support muscle growth, improve energy levels, and promote overall health.',
@@ -108,6 +147,11 @@ class _HomeScreenState extends State<HomeScreen> {
       name: 'Chicken',
       price: 22.79,
       image: 'assets/images/chicken.png',
+      images: [
+        'assets/images/chicken.png',
+        'assets/images/chicken.png',
+        'assets/images/chicken.png',
+      ],
       description: '1pcs, price',
       description2:
           'Chicken is a good source of lean protein and essential amino acids. It can help support muscle development, improve immune function, and provide sustained energy.',
