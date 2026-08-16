@@ -56,8 +56,8 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/carrot.png',
       images: [
         'assets/images/carrot.png',
-        'assets/images/carrot.png',
-        'assets/images/carrot.png',
+        'assets/images/carrot_2.png',
+        'assets/images/carrot_3.png',
       ],
       description2:
           'Carrots are high in beta-carotene, which is converted to vitamin A in the body. They support eye health, boost the immune system, and may reduce the risk of certain cancers.',
@@ -71,8 +71,8 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/orange.png',
       images: [
         'assets/images/orange.png',
-        'assets/images/orange.png',
-        'assets/images/orange.png',
+        'assets/images/orange_2.png',
+        'assets/images/orange_3.jpg',
       ],
       description2:
           'Oranges are an excellent source of vitamin C and antioxidants. They can help strengthen the immune system, improve skin health, and reduce the risk of chronic diseases.',
@@ -87,8 +87,8 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/pepper.png',
       images: [
         'assets/images/pepper.png',
-        'assets/images/pepper.png',
-        'assets/images/pepper.png',
+        'assets/images/red_pepper_2.png',
+        'assets/images/red_pepper_3.png',
       ],
       description: '1Kg, price',
       description2:
@@ -102,8 +102,8 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/apple_green.png',
       images: [
         'assets/images/apple_green.png',
-        'assets/images/apple.png',
-        'assets/images/apple_2.png',
+        'assets/images/green_apple_2.png',
+        'assets/images/green_apple_3.png',
       ],
       description: '7pcs, price',
       description2:
@@ -117,8 +117,8 @@ class _HomeScreenState extends State<HomeScreen> {
       image: 'assets/images/tomato.png',
       images: [
         'assets/images/tomato.png',
-        'assets/images/tomato.png',
-        'assets/images/tomato.png',
+        'assets/images/tomato_2.png',
+        'assets/images/tomato_3.png',
       ],
       description: '7pcs, price',
       description2:
@@ -128,14 +128,14 @@ class _HomeScreenState extends State<HomeScreen> {
   ];
   final List<Product> _groceryItems = [
     Product(
-      id: 7,
+      id: 8,
       name: 'Beef',
       price: 20.75,
       image: 'assets/images/beef.png',
       images: [
         'assets/images/beef.png',
-        'assets/images/beef.png',
-        'assets/images/beef.png',
+        'assets/images/beef_2.png',
+        'assets/images/beef_3.png',
       ],
       description: '100g, price',
       description2:
@@ -143,14 +143,14 @@ class _HomeScreenState extends State<HomeScreen> {
       nutrition: '100gr',
     ),
     Product(
-      id: 8,
+      id: 9,
       name: 'Chicken',
       price: 22.79,
       image: 'assets/images/chicken.png',
       images: [
         'assets/images/chicken.png',
-        'assets/images/chicken.png',
-        'assets/images/chicken.png',
+        'assets/images/chicken_2.png',
+        'assets/images/chicken_3.png',
       ],
       description: '1pcs, price',
       description2:
@@ -227,14 +227,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: Image.asset(
                         slider,
                         fit: BoxFit.cover,
-                        // width: double.infinity,
+                        width: double.infinity,
                       ),
                     ),
                   ),
                 )
                 .toList(),
             options: CarouselOptions(
-              height: 120,
+              aspectRatio: 2.5,
               viewportFraction: 1,
               autoPlay: true,
               enlargeCenterPage: false,

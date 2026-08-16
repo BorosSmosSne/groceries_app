@@ -37,8 +37,11 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 width: 330,
                 height: 200,
                 fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) =>
-                    const Icon(Icons.image_not_supported, size: 64, color: Colors.grey),
+                errorBuilder: (context, error, stackTrace) => const Icon(
+                  Icons.image_not_supported,
+                  size: 64,
+                  color: Colors.grey,
+                ),
               ),
             );
           }).toList(),
@@ -86,11 +89,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       return widget.product.images!;
     }
     // Fallback default list with 3 images
-    return [
-      widget.product.image,
-      widget.product.image,
-      widget.product.image,
-    ];
+    return [widget.product.image, widget.product.image, widget.product.image];
   }
 
   // -- logic Methods --
@@ -133,9 +132,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               ),
               child: Stack(
                 children: [
-                  Center(
-                    child: buildImageSlider(getProductImages()),
-                  ),
+                  Center(child: buildImageSlider(getProductImages())),
                   Positioned(
                     top: 16,
                     left: 16,
