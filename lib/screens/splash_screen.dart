@@ -26,18 +26,21 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     final SharedPreferences preferences = await SharedPreferences.getInstance();
     final token = preferences.getString('sv9.pos.token');
-    if (token == null) {
+    if (!mounted) return;
+
+    if (token == null || token.isEmpty) {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => LoginScreen()),
         (route) => false,
       );
-    } else {}
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => HomeScreen()),
-      (route) => false,
-    );
+    } else {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => HomeScreen()),
+        (route) => false,
+      );
+    }
   }
 
   @override

@@ -2,6 +2,7 @@ import 'package:device_preview/device_preview.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:groceries_app/screens/home_screen.dart';
+import 'package:groceries_app/screens/home_screen_2.dart';
 import 'package:groceries_app/screens/login_screen.dart';
 import 'package:groceries_app/screens/splash_screen.dart';
 
@@ -23,7 +24,7 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: HomeScreen2(),
       // HomeScreen(),
     );
   }
