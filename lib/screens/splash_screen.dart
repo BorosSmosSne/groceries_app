@@ -29,17 +29,9 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
 
     if (token == null || token.isEmpty) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-        (route) => false,
-      );
+      Navigator.pushNamedAndRemoveUntil(context, '/login', (route) => false);
     } else {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
-        (route) => false,
-      );
+      Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
     }
   }
 

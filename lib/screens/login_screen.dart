@@ -39,11 +39,7 @@ class _HomescreenState extends State<LoginScreen> {
       await saveCredentials(User(token: responeToken));
       // print('Logged in successfully!');
       if (mounted) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-          (route) => false,
-        );
+        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
       }
     } else {
       showDialog(

@@ -24,7 +24,13 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
-      home: HomeScreen2(),
+      // home: HomeScreen2(),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => const SplashScreen(),
+        '/login': (context) => const LoginScreen(),
+        '/home': (context) => const HomeScreen(),
+      },
       // HomeScreen(),
     );
   }
