@@ -32,7 +32,12 @@ class ProductCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Expanded(
-              child: Center(child: Image.asset(product.image, width: 100)),
+              child: Center(
+                child: Hero(
+                  tag: product.id.toString(),
+                  child: Image.asset(product.image, width: 100),
+                ),
+              ),
             ),
             SizedBox(height: 8),
             Text(

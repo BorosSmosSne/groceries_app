@@ -30,19 +30,26 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       children: [
         const SizedBox(height: 30),
         CarouselSlider(
-          items: images.map((imagePath) {
-            return Center(
-              child: Image.asset(
-                imagePath,
-                width: 330,
-                height: 200,
-                fit: BoxFit.contain,
-                errorBuilder: (context, error, stackTrace) => const Icon(
-                  Icons.image_not_supported,
-                  size: 64,
-                  color: Colors.grey,
-                ),
+          items: images.asMap().entries.map((entry) {
+            final int index = entry.key;
+            final String imagePath = entry.value;
+
+            final Widget imageWidget = Image.asset(
+              imagePath,
+              width: 330,
+              height: 200,
+              fit: BoxFit.contain,
+              errorBuilder: (context, error, stackTrace) => const Icon(
+                Icons.image_not_supported,
+                size: 64,
+                color: Colors.grey,
               ),
+            );
+
+            return Center(
+              child: index == 0
+                  ? Hero(tag: widget.product.id.toString(), child: imageWidget)
+                  : imageWidget,
             );
           }).toList(),
           options: CarouselOptions(

@@ -14,6 +14,7 @@ class LoginScreen extends StatefulWidget {
 class _HomescreenState extends State<LoginScreen> {
   bool _isCheck = false;
   bool _obsecureText = true;
+  bool _isFormValid = false;
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -22,6 +23,37 @@ class _HomescreenState extends State<LoginScreen> {
     setState(() {});
   }
 
+  void _validateForm() {
+    // Check if the current form state satisfies all validator rules
+    final isValid = _formKey.currentState?.validate() ?? false;
+    if (isValid != _isFormValid) {
+      setState(() {
+        _isFormValid = isValid;
+      });
+    }
+  }
+
+  void _checkValidation() {
+    final email = _emailController.text;
+    final password = _passwordController.text;
+
+    final emailExp = RegExp(
+      r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+    );
+    final passwordExp = RegExp(
+      r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!?$%&*]).{8,}$',
+    );
+
+    final isValid = emailExp.hasMatch(email) && passwordExp.hasMatch(password);
+
+    if (isValid != _isFormValid) {
+      setState(() {
+        _isFormValid = isValid;
+      });
+    }
+  }
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   Future<void> saveCredentials(User user) async {
     // Save the email and password to local storage or secure storage
     final SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -30,36 +62,39 @@ class _HomescreenState extends State<LoginScreen> {
   }
 
   Future<void> login() async {
-    final email = 'sv9@gmail.com';
-    final password = 'sv9@123';
-    if (_emailController.text == email &&
-        _passwordController.text == password) {
-      final responeToken =
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE4MDAwMDAwMDB9.6n4w6_uCgMbeuY7Vp_tHhUksL8Pq8wW7Fk1Z6_9_5z4';
-      await saveCredentials(User(token: responeToken));
-      // print('Logged in successfully!');
-      if (mounted) {
-        Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
-      }
-    } else {
-      showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  'Login Failed',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
-                ),
-                Text('Invalid email or password'),
-              ],
+    if (_formKey.currentState?.validate() == null) return;
+    if (_formKey.currentState!.validate()) {
+      final email = 'sv9@gmail.com';
+      final password = 'Sv9@1234';
+      if (_emailController.text == email &&
+          _passwordController.text == password) {
+        final responeToken =
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyLCJleHAiOjE4MDAwMDAwMDB9.6n4w6_uCgMbeuY7Vp_tHhUksL8Pq8wW7Fk1Z6_9_5z4';
+        await saveCredentials(User(token: responeToken));
+        // print('Logged in successfully!');
+        if (mounted) {
+          Navigator.pushNamedAndRemoveUntil(context, '/home', (route) => false);
+        }
+      } else {
+        showDialog(
+          context: context,
+          builder: (context) => Dialog(
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Login Failed',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                  Text('Invalid email or password'),
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
     }
   }
 
@@ -107,62 +142,102 @@ class _HomescreenState extends State<LoginScreen> {
                           ),
                         ),
                         SizedBox(height: 20),
-                        Text(
-                          "Email",
-                          style: GoogleFonts.workSans(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: _emailController,
-                          decoration: InputDecoration(
-                            // labelText: 'Email',
-                            hintText: 'example@gmail.com',
-                            labelStyle: GoogleFonts.workSans(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        Text(
-                          "Password",
-                          style: GoogleFonts.workSans(
-                            fontSize: 16,
-                            color: Colors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        SizedBox(height: 20),
-                        TextField(
-                          controller: _passwordController,
-                          obscureText: _obsecureText,
-                          decoration: InputDecoration(
-                            // labelText: 'Password',
-                            hintText: 'Enter your password',
-                            labelStyle: GoogleFonts.workSans(
-                              fontSize: 16,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500,
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                _obsecureText
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+                        Form(
+                          key: _formKey,
+                          autovalidateMode: AutovalidateMode.onUserInteraction,
+
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Email",
+                                style: GoogleFonts.workSans(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                              onPressed: togglePassword,
-                            ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                controller: _emailController,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                onChanged: (_) => _checkValidation(),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your email';
+                                  }
+                                  RegExp emailExp = RegExp(
+                                    r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$',
+                                  );
+                                  if (!emailExp.hasMatch(value)) {
+                                    return 'Please enter valid email format';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  // labelText: 'Email',
+                                  hintText: 'example@gmail.com',
+                                  labelStyle: GoogleFonts.workSans(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              Text(
+                                "Password",
+                                style: GoogleFonts.workSans(
+                                  fontSize: 16,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              SizedBox(height: 20),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: _obsecureText,
+                                autovalidateMode:
+                                    AutovalidateMode.onUserInteraction,
+                                onChanged: (_) => _checkValidation(),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return 'Please enter your password';
+                                  }
+                                  RegExp passwordExp = RegExp(
+                                    r'^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[@!?$%&*]).{8,}$',
+                                  );
+                                  if (!passwordExp.hasMatch(value)) {
+                                    return 'Requires 8+ chars, A-z, 0-9, & symbols';
+                                  }
+                                  return null;
+                                },
+                                decoration: InputDecoration(
+                                  // labelText: 'Password',
+                                  hintText: 'Enter your password',
+                                  labelStyle: GoogleFonts.workSans(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _obsecureText
+                                          ? Icons.visibility_off
+                                          : Icons.visibility,
+                                    ),
+                                    onPressed: togglePassword,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         SizedBox(height: 20),
@@ -193,22 +268,24 @@ class _HomescreenState extends State<LoginScreen> {
                           //   login();
                           // },
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.blueAccent,
+                            backgroundColor: _isFormValid
+                                ? Colors.blueAccent
+                                : Colors.grey.shade400,
                             padding: EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(25),
                             ),
                           ),
-                          onPressed: () {
-                            // Navigator.pushAndRemoveUntil(
-                            //   context,
-                            //   MaterialPageRoute(
-                            //     builder: (context) => HomeScreen(),
-                            //   ),
-                            //   (route) => false,
-                            // );
-                            login();
-                          },
+                          onPressed:
+                              // Navigator.pushAndRemoveUntil(
+                              //   context,
+                              //   MaterialPageRoute(
+                              //     builder: (context) => HomeScreen(),
+                              //   ),
+                              //   (route) => false,
+                              // );
+                              _isFormValid ? login : null,
+
                           child: Text(
                             "Login",
                             style: TextStyle(fontSize: 18, color: Colors.white),
