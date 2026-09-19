@@ -15,7 +15,21 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  void initState() {
+    super.initState();
+
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1000),
+    );
+
+    // ⚠️ WITHOUT THIS LINE, NOTHING WILL MOVE OR FADE:
+    _controller.forward();
+  }
+
   int currentSlideIndex = 0;
   final List<Product> _exlusiveOffers = [
     Product(
@@ -175,6 +189,11 @@ class _HomeScreenState extends State<HomeScreen> {
     MenuItem(label: 'Account', icon: 'assets/images/svg/Account.svg'),
   ];
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   Widget build(BuildContext context) {
     return Scaffold(
       // appBar: AppBar(),
@@ -184,7 +203,22 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: EdgeInsets.only(bottom: 50, top: 70),
         children: [
           // SizedBox(height: 70),
-          Image.asset('assets/icons/carrot_logo.png', height: 30),
+          SlideTransition(
+            position:
+                Tween<Offset>(
+                  begin: const Offset(0.0, -0.6), // Starts slightly above
+                  end: Offset.zero, // Slides smoothly into place
+                ).animate(
+                  CurvedAnimation(
+                    parent: _controller,
+                    curve: Curves.easeOutBack,
+                  ),
+                ),
+            child: FadeTransition(
+              opacity: _controller,
+              child: Image.asset('assets/icons/carrot_logo.png', height: 30),
+            ),
+          ),
           SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,

@@ -13,8 +13,38 @@ class ProductCard extends StatelessWidget {
         // Handle card tap if needed
         Navigator.push(
           context,
-          MaterialPageRoute(
-            builder: (context) => ProductDetailScreen(product: product),
+          // MaterialPageRoute(
+          //   builder: (context) => ProductDetailScreen(product: product),
+          // ),
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) =>
+                ProductDetailScreen(product: product),
+            transitionDuration: const Duration(milliseconds: 500),
+            reverseTransitionDuration: const Duration(milliseconds: 400),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              // 1. Slide: Starts slightly below (20%) and rises to default position
+              final slideAnimation =
+                  Tween<Offset>(
+                    begin: const Offset(1.0, 0.0),
+                    end: Offset.zero,
+                  ).animate(
+                    CurvedAnimation(
+                      parent: animation,
+                      curve: Curves.easeOutCubic,
+                    ),
+                  );
+
+              // 2. Fade: Transitions opacity from 0.0 to 1.0
+              final fadeAnimation = CurvedAnimation(
+                parent: animation,
+                curve: Curves.easeIn,
+              );
+
+              return SlideTransition(
+                position: slideAnimation,
+                child: FadeTransition(opacity: fadeAnimation, child: child),
+              );
+            },
           ),
         );
       },

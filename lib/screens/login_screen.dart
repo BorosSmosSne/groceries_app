@@ -65,7 +65,7 @@ class _HomescreenState extends State<LoginScreen> {
     if (_formKey.currentState?.validate() == null) return;
     if (_formKey.currentState!.validate()) {
       final email = 'sv9@gmail.com';
-      final password = 'Sv9@1234';
+      final password = 'Sv9@12345';
       if (_emailController.text == email &&
           _passwordController.text == password) {
         final responeToken =
@@ -144,8 +144,7 @@ class _HomescreenState extends State<LoginScreen> {
                         SizedBox(height: 20),
                         Form(
                           key: _formKey,
-                          autovalidateMode: AutovalidateMode.onUserInteraction,
-
+                          autovalidateMode: AutovalidateMode.disabled,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
