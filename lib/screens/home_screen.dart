@@ -255,7 +255,10 @@ class _HomeScreenState extends State<HomeScreen>
             items: _slider
                 .map(
                   (slider) => Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      vertical: 16,
+                    ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
                       child: Image.asset(

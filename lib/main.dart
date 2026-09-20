@@ -5,6 +5,7 @@ import 'package:groceries_app/screens/fade_animation.dart';
 import 'package:groceries_app/screens/home_screen.dart';
 import 'package:groceries_app/screens/home_screen_2.dart';
 import 'package:groceries_app/screens/login_screen.dart';
+import 'package:groceries_app/screens/rest_api.dart';
 import 'package:groceries_app/screens/splash_screen.dart';
 
 void main() {
@@ -25,15 +26,15 @@ class MainApp extends StatelessWidget {
     return MaterialApp(
       locale: DevicePreview.locale(context),
       debugShowCheckedModeBanner: false,
-      // home:
+      home: RestApi(),
       // DetailScreen(),
       // FirstScreen(),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/home': (context) => const HomeScreen(),
-      },
+      // initialRoute: '/',
+      // routes: {
+      //   '/': (context) => const SplashScreen(),
+      //   '/login': (context) => const LoginScreen(),
+      //   '/home': (context) => const HomeScreen(),
+      // },
       // HomeScreen(),
     );
   }
