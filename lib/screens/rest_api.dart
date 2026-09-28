@@ -1,117 +1,56 @@
 import 'dart:convert';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:groceries_app/models/product2.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import '../models/product_model.dart';
 
-class RestApi extends StatefulWidget {
-  const RestApi({super.key});
-
-  @override
-  State<RestApi> createState() => _RestApiState();
-}
-
-class _RestApiState extends State<RestApi> {
-  List<Product2> products = [];
-  bool isLoading = true;
-  @override
-  void initState() {
-    super.initState();
-    getAllProducts();
-  }
-
-  void getAllProducts() async {
-    final response = await http.get(
-      Uri.parse('https://fakestoreapi.com/products'),
-    );
-    if (response.statusCode == 200) {
-      // Process the successful response
-      final data = json.decode(response.body);
-      for (var element in data) {
-        products.add(Product2.fromJson(element));
-      }
-    } else {
-      // Handle the error
-      print('Error: ${response.statusCode}');
-      print('Response body: ${response.body}');
-      if (!mounted) return;
-      showDialog(
-        context: context,
-        builder: (context) => Dialog(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 16),
-              Text(
-                "Request Error",
-                style: TextStyle(fontSize: 20, color: Colors.red),
-              ),
-              SizedBox(height: 16),
-              Icon(Icons.clear_rounded, size: 48, color: Colors.red),
-              SizedBox(height: 16),
-              Text("Something went wrong! Please try again."),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-
-                child: Text("Ok"),
-              ),
-              SizedBox(height: 16),
-            ],
-          ),
-        ),
-      );
+class RestApi {
+  // Web uses 127.0.0.1, Android emulator uses 10.0.2.2
+  static String get baseUrl {
+    if (kIsWeb) {
+      return 'http://127.0.0.1:8080/api/product';
     }
-    isLoading = false;
-    setState(() {});
+    return 'http://10.0.2.2:8080/api/product';
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Rest API')),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : GridView.builder(
-              itemCount: products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 0.50,
-                mainAxisSpacing: 20,
-                crossAxisSpacing: 20,
-              ),
-              itemBuilder: (context, index) {
-                return Card(
-                  shadowColor: Colors.black.withValues(alpha: 0.25),
-                  elevation: 20,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      children: [
-                        Image.network(
-                          products[index].image,
-                          height: 200,
-                          width: 180,
-                        ),
-                        SizedBox(height: 20),
-                        Row(
-                          children: [
-                            Expanded(child: Text(products[index].title)),
-                            Text('\$${products[index].price}'),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-    );
+  // 1. READ ALL (GET)
+  static Future<List<ProductModel>> fetchProducts() async {
+    final response = await http.get(Uri.parse(baseUrl));
+    if (response.statusCode == 200) {
+      final List data = jsonDecode(response.body);
+      return data.map((json) => ProductModel.fromJson(json)).toList();
+    } else if (response.statusCode == 404) {
+      return []; // Return empty list when no products found
+    }
+    throw Exception('Failed to load products: ${response.statusCode}');
+  }
+
+  // 2. READ BY ID (GET /api/product/{id})
+  static Future<ProductModel> getProductById(int id) async {
+    final response = await http.get(Uri.parse('$baseUrl/$id'));
+    if (response.statusCode == 200) {
+      return ProductModel.fromJson(jsonDecode(response.body));
+    }
+    throw Exception('Failed to load product details');
+  }
+
+  // 3. CREATE (POST multipart/form-data)
+  static Future<bool> createProduct({
+    required String name,
+    required double price,
+    required int qty,
+  }) async {
+    final request = http.MultipartRequest('POST', Uri.parse(baseUrl));
+    request.fields['name'] = name;
+    request.fields['price'] = price.toString();
+    request.fields['qty'] = qty.toString();
+
+    final streamedResponse = await request.send();
+    return streamedResponse.statusCode == 200 || streamedResponse.statusCode == 201;
+  }
+
+  // 4. DELETE (DELETE /api/product/{id})
+  static Future<bool> deleteProduct(int id) async {
+    final response = await http.delete(Uri.parse('$baseUrl/$id'));
+    return response.statusCode == 200 || response.statusCode == 202;
   }
 }
