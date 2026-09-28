@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:groceries_app/screens/rest_api.dart';
 import '../models/product_model.dart';
-// import '../services/rest_api_service.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final int productId;
@@ -13,12 +12,12 @@ class ProductDetailScreen extends StatefulWidget {
 }
 
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
-  late Future<ProductModel> _detailFuture;
+  late Future<ProductModel> _future;
 
   @override
   void initState() {
     super.initState();
-    _detailFuture = RestApiService.getProductById(widget.productId);
+    _future = RestApi.getProductById(widget.productId);
   }
 
   @override
@@ -26,48 +25,51 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(title: const Text('Product Details')),
       body: FutureBuilder<ProductModel>(
-        future: _detailFuture,
+        future: _future,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasError) {
-            return Center(child: Text('Failed to load item: ${snapshot.error}'));
+            return Center(child: Text('Error: ${snapshot.error}'));
           }
 
-          final product = snapshot.data!;
+          final p = snapshot.data!;
           return Padding(
-            padding: const EdgeInsets.all(20.0),
+            padding: const EdgeInsets.all(20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Center(
-                  child: Container(
-                    height: 160,
-                    width: 160,
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey.shade50,
-                      borderRadius: BorderRadius.circular(16),
+                if (p.imageUrl != null)
+                  Center(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        p.imageUrl!,
+                        height: 180,
+                        fit: BoxFit.cover,
+                        errorBuilder: (_, __, ___) =>
+                            const Icon(Icons.fastfood, size: 80),
+                      ),
                     ),
-                    child: const Icon(Icons.inventory, size: 80, color: Colors.blueGrey),
                   ),
-                ),
-                const SizedBox(height: 24),
+                const SizedBox(height: 20),
                 Text(
-                  product.name,
-                  style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  p.name,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  '\$${product.price.toStringAsFixed(2)}',
-                  style: const TextStyle(fontSize: 20, color: Colors.green, fontWeight: FontWeight.w600),
+                  'Price: \$${p.price.toStringAsFixed(2)}',
+                  style: const TextStyle(fontSize: 18, color: Colors.green),
                 ),
-                const SizedBox(height: 16),
-                const Text('Description', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
+                const SizedBox(height: 8),
                 Text(
-                  product.qty.isNotEmpty ? product.description : 'No description provided.',
-                  style: TextStyle(color: Colors.grey.shade700, height: 1.4),
+                  'In Stock: ${p.qty} items',
+                  style: const TextStyle(fontSize: 16),
                 ),
               ],
             ),

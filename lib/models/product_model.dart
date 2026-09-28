@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/rendering.dart';
 
 class ProductModel {
@@ -16,32 +17,35 @@ class ProductModel {
   });
 
   factory ProductModel.fromJson(Map<String, dynamic> json) {
-    // 1. Clean & normalize the image URL coming from Spring Boot
     String rawImage = (json['fullImage'] ?? json['imgUrl'] ?? '')
         .toString()
         .trim();
-
     if (rawImage.isNotEmpty) {
-      // Fix duplicate base URLs if present from backend
+      // 1. Strip duplicated base URLs
       if (rawImage.contains('http://localhost:8080http://localhost:8080')) {
         rawImage = rawImage.replaceAll(
           'http://localhost:8080http://localhost:8080',
           'http://localhost:8080',
         );
       }
-      // Fix missing slashes before static
+      // 2. Fix missing slashes before static
       if (rawImage.contains('8080static/')) {
         rawImage = rawImage.replaceAll('8080static/', '8080/static/');
       }
-      // If testing on Android Emulator, change localhost to 10.0.2.2
-      // rawImage = rawImage.replaceAll('localhost', '10.0.2.2');
+      // 3. Android Emulator host routing
+      if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+        rawImage = rawImage.replaceAll('localhost', '10.0.2.2');
+        rawImage = rawImage.replaceAll('127.0.0.1', '10.0.2.2');
+      }
+      // 4. Safely encode spaces and brackets in filenames
+      rawImage = Uri.encodeFull(rawImage);
     }
     return ProductModel(
       id: json['id'],
       name: json['name'],
       price: double.parse((json['price'] ?? 0.0).toString()),
       qty: int.tryParse((json['qty'] ?? 0).toString()) ?? 0,
-      imageUrl: json['image_url'] ?? json['imagePath'],
+      imageUrl: rawImage.isNotEmpty ? rawImage : null,
     );
   }
 
