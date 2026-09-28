@@ -94,15 +94,78 @@ class _ProductListScreenState extends State<ProductListScreen> {
       builder: (ctx) => StatefulBuilder(
         builder: (BuildContext sheetCtx, StateSetter setSheetState) {
           Future<void> pickNewImage() async {
-            final picker = ImagePicker();
-            final file = await picker.pickImage(
-              source: ImageSource.gallery,
-              maxWidth: 1024,
-              maxHeight: 1024,
-              imageQuality: 80,
+            // Show permission prompt dialog
+            final bool? allowAccess = await showDialog<bool>(
+              context: context,
+              builder: (ctx) => AlertDialog(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                title: const Row(
+                  children: [
+                    Icon(Icons.photo_library, color: Color(0xFF53B175)),
+                    SizedBox(width: 8),
+                    Text(
+                      'Permission Request',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+                content: const Text(
+                  'This app requires access to your photo gallery to update the product picture. Do you allow access?',
+                  style: TextStyle(fontSize: 14),
+                ),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.pop(ctx, false),
+                    child: const Text(
+                      'Deny',
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                  ),
+                  ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF53B175),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                    ),
+                    onPressed: () => Navigator.pop(ctx, true),
+                    child: const Text(
+                      'Allow Access',
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                ],
+              ),
             );
-            if (file != null) {
-              setSheetState(() => newImage = file);
+
+            if (allowAccess != true) {
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Gallery permission was denied.')),
+              );
+              return;
+            }
+            try {
+              final picker = ImagePicker();
+              final file = await picker.pickImage(
+                source: ImageSource.gallery,
+                maxWidth: 1024,
+                maxHeight: 1024,
+                imageQuality: 80,
+              );
+              if (file != null) {
+                setSheetState(() => newImage = file);
+              }
+            } catch (e) {
+              if (!mounted) return;
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('Failed to access gallery: $e')),
+              );
             }
           }
 

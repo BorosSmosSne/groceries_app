@@ -20,8 +20,28 @@ class ProductModel {
     String rawImage = (json['fullImage'] ?? json['imgUrl'] ?? '')
         .toString()
         .trim();
+    // if (rawImage.isNotEmpty) {
+    //   // 1. Strip duplicated base URLs
+    //   if (rawImage.contains('http://localhost:8080http://localhost:8080')) {
+    //     rawImage = rawImage.replaceAll(
+    //       'http://localhost:8080http://localhost:8080',
+    //       'http://localhost:8080',
+    //     );
+    //   }
+    //   // 2. Fix missing slashes before static
+    //   if (rawImage.contains('8080static/')) {
+    //     rawImage = rawImage.replaceAll('8080static/', '8080/static/');
+    //   }
+    //   // 3. Android Emulator host routing
+    //   if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
+    //     rawImage = rawImage.replaceAll('localhost', '10.0.2.2');
+    //     rawImage = rawImage.replaceAll('127.0.0.1', '10.0.2.2');
+    //   }
+    //   // 4. Safely encode spaces and brackets in filenames
+    //   rawImage = Uri.encodeFull(rawImage);
+    // }
     if (rawImage.isNotEmpty) {
-      // 1. Strip duplicated base URLs
+      // 1. Remove duplicate base URLs if present from backend
       if (rawImage.contains('http://localhost:8080http://localhost:8080')) {
         rawImage = rawImage.replaceAll(
           'http://localhost:8080http://localhost:8080',
@@ -32,12 +52,12 @@ class ProductModel {
       if (rawImage.contains('8080static/')) {
         rawImage = rawImage.replaceAll('8080static/', '8080/static/');
       }
-      // 3. Android Emulator host routing
+      // 3. Map localhost -> 10.0.2.2 for Android Emulator
       if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
         rawImage = rawImage.replaceAll('localhost', '10.0.2.2');
         rawImage = rawImage.replaceAll('127.0.0.1', '10.0.2.2');
       }
-      // 4. Safely encode spaces and brackets in filenames
+      // 4. Safely encode spaces and brackets in filenames (e.g. "download (6).jpg")
       rawImage = Uri.encodeFull(rawImage);
     }
     return ProductModel(

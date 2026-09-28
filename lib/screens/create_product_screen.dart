@@ -52,6 +52,55 @@ class _CreateProductScreenState extends State<CreateProductScreen> {
   //   }
   // }
   Future<void> _pickImage() async {
+    // 1. Show an explicit permission explanation dialog before accessing the gallery
+    final bool? allowAccess = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: const Row(
+          children: [
+            Icon(Icons.photo_library, color: Color(0xFF53B175)),
+            SizedBox(width: 8),
+            Text(
+              'Permission Request',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+        content: const Text(
+          'This app requires access to your photo gallery to select and upload product images. Do you allow access?',
+          style: TextStyle(fontSize: 14),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: const Text('Deny', style: TextStyle(color: Colors.grey)),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF53B175),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+            ),
+            onPressed: () => Navigator.pop(ctx, true),
+            child: const Text(
+              'Allow Access',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    // If user tapped "Deny", halt and inform them
+    if (allowAccess != true) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Gallery permission was denied.')),
+      );
+      return;
+    }
     try {
       final picker = ImagePicker();
       final file = await picker.pickImage(
